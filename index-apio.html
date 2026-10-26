@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fiesta Secreta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap">
+<style>
+  :root {
+    color-scheme: light;
+    --ig-bg: #fafafa; --card: #ffffff; --border: #dbdbdb; --text: #262626;
+    --muted: #8e8e8e; --field: #fafafa; --blue: #0095f6; --blue-soft: #b2dffc;
+    --link: #00376b; --fb: #385185; --party: #ff2d7a; --party-2: #7b2ff7; --party-ink: #2a1133;
+    --font-ig: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-party: "Fredoka", var(--font-ig);
+  }
+  * { box-sizing: border-box; }
+  html, body { min-height: 100%; }
+  body {
+    margin: 0; background: var(--ig-bg); color: var(--text); font-family: var(--font-ig);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding-block: 28px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    gap: 10px; -webkit-font-smoothing: antialiased;
+  }
+  .stage { width: 100%; max-width: 350px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 1px; padding: 44px 40px 24px; }
+  .logo { display: flex; justify-content: center; margin-bottom: 30px; }
+  .logo .brand { font-family: var(--font-party); font-weight: 700; font-size: 40px; letter-spacing: .5px; color: var(--text); line-height: 1; }
+  .logo img { max-width: 175px; height: auto; display: block; }
+  form { display: flex; flex-direction: column; gap: 6px; }
+  .field { position: relative; display: flex; }
+  .field input {
+    width: 100%; background: var(--field); border: 1px solid var(--border); border-radius: 3px;
+    padding: 9px 8px; font-size: 12px; font-family: inherit; color: var(--text); min-width: 0;
+  }
+  .field input::placeholder { color: var(--muted); font-size: 12px; }
+  .field input:focus { outline: none; border-color: #a8a8a8; }
+  .submit {
+    margin-top: 8px; border: 0; background: var(--blue); color: #fff; font-weight: 600; font-size: 14px;
+    font-family: inherit; padding: 7px 16px; border-radius: 8px; cursor: pointer;
+  }
+  .submit:disabled { background: var(--blue-soft); cursor: default; }
+  .divider { display: flex; align-items: center; gap: 18px; margin: 18px 0; color: var(--muted); font-size: 13px; font-weight: 600; }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+  .fb {
+    display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--fb);
+    font-weight: 600; font-size: 14px; background: none; border: 0; cursor: pointer; font-family: inherit; width: 100%; padding: 6px;
+  }
+  .fb svg { width: 16px; height: 16px; }
+  .forgot { display: block; text-align: center; margin-top: 12px; color: var(--link); font-size: 12px; text-decoration: none; }
+  .signup { background: var(--card); border: 1px solid var(--border); border-radius: 1px; padding: 20px; text-align: center; font-size: 14px; margin-top: 10px; }
+  .signup a { color: var(--blue); font-weight: 600; text-decoration: none; }
+  .footmeta { margin-top: 14px; text-align: center; color: var(--muted); font-size: 12px; }
+
+  .reveal { background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 10px 40px rgba(123, 47, 247, .18); }
+  .reveal .top { background: linear-gradient(135deg, var(--party) 0%, var(--party-2) 100%); color: #fff; text-align: center; padding: 30px 24px 26px; }
+  .confetti { font-size: 34px; letter-spacing: 6px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .pop { animation: pop .5s cubic-bezier(.2,1.3,.4,1) both; }
+    @keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  }
+  .reveal h1 { font-family: var(--font-party); font-weight: 700; font-size: 30px; margin: 10px 0 4px; text-wrap: balance; line-height: 1.05; }
+  .reveal .sub { font-size: 14px; opacity: .95; margin: 0; }
+  .reveal .body { padding: 22px 24px 26px; color: var(--party-ink); }
+  .details { display: grid; gap: 12px; margin-bottom: 20px; }
+  .detail { display: flex; gap: 12px; align-items: center; background: #faf5ff; border: 1px solid #efe3ff; border-radius: 12px; padding: 12px 14px; }
+  .detail .ico { font-size: 20px; }
+  .detail .k { font-size: 11px; text-transform: uppercase; letter-spacing: .6px; color: #9a6cc9; font-weight: 600; }
+  .detail .v { font-size: 15px; font-weight: 600; font-family: var(--font-party); }
+  .rsvp-q { font-weight: 700; font-family: var(--font-party); font-size: 17px; margin: 0 0 10px; }
+  .rsvp { display: flex; gap: 10px; margin-bottom: 14px; }
+  .rsvp button {
+    flex: 1; font-family: var(--font-party); font-weight: 600; font-size: 15px; padding: 11px; border-radius: 12px;
+    border: 2px solid transparent; cursor: pointer; background: #f1e9fb; color: var(--party-ink);
+  }
+  .rsvp button[aria-pressed="true"].yes { background: #e7f9ec; border-color: #34c759; color: #0f7a33; }
+  .rsvp button[aria-pressed="true"].no  { background: #fdeaea; border-color: #ff3b30; color: #b31a12; }
+  .inp {
+    width: 100%; font-family: inherit; font-size: 14px; padding: 11px 12px; border: 1px solid #e4d4f7;
+    border-radius: 12px; margin-bottom: 10px; color: var(--party-ink); background: #fff; min-width: 0;
+  }
+  .inp:focus { outline: none; border-color: var(--party-2); }
+  textarea.inp { resize: vertical; min-height: 54px; }
+  .send {
+    display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%; text-decoration: none;
+    font-family: var(--font-party); font-weight: 700; font-size: 16px; padding: 13px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--party), var(--party-2)); color: #fff; border: 0; cursor: pointer;
+  }
+  .send:disabled { opacity: .6; cursor: default; }
+  .done { text-align: center; padding: 10px 0 2px; }
+  .done .big { font-family: var(--font-party); font-weight: 700; font-size: 22px; color: var(--party-2); margin-bottom: 4px; }
+  .done .sm { font-size: 14px; color: var(--party-ink); }
+  .err { color: #b31a12; font-size: 13px; text-align: center; margin-top: 8px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <!-- ======== LOGIN ======== -->
+  <div id="login">
+    <div class="card">
+      <div class="logo">
+        <!-- 👇 Reemplaza por tu logo: <img src="logo.png" alt=""> -->
+        <span class="brand">tu logo</span>
+      </div>
+      <form id="loginForm" autocomplete="off">
+        <div class="field"><input id="user" type="text" placeholder="Teléfono, usuario o correo electrónico" aria-label="Usuario"></div>
+        <div class="field"><input id="pass" type="password" placeholder="Contraseña" aria-label="Contraseña"></div>
+        <button type="submit" class="submit" id="loginBtn" disabled>Iniciar sesión</button>
+      </form>
+      <div class="divider">O</div>
+      <button type="button" class="fb" id="fbBtn">
+        <svg viewBox="0 0 24 24" fill="#385185"><path d="M22 12a10 10 0 1 0-11.56 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.99A10 10 0 0 0 22 12z"/></svg>
+        Iniciar sesión con Facebook
+      </button>
+      <a class="forgot" href="#" id="forgot">¿Olvidaste tu contraseña?</a>
+    </div>
+    <div class="signup">¿No tienes una cuenta? <a href="#" id="signup">Regístrate</a></div>
+    <div class="footmeta">Hecho con cariño 💛</div>
+  </div>
+
+  <!-- ======== SORPRESA ======== -->
+  <div id="reveal" class="reveal" hidden>
+    <div class="top">
+      <div class="confetti pop">🎉 🥳 🎈</div>
+      <h1 class="pop">¡Era una trampa!</h1>
+      <p class="sub">Esto no es Instagram... es tu invitación 👀</p>
+    </div>
+    <div class="body">
+      <!-- 👇 Edita con los datos reales de tu cumple -->
+      <div class="details">
+        <div class="detail"><span class="ico">🎂</span><div><div class="k">Cumpleaños de</div><div class="v">[TU NOMBRE]</div></div></div>
+        <div class="detail"><span class="ico">📅</span><div><div class="k">Cuándo</div><div class="v">[Sábado 00 de mes, 21:00 hrs]</div></div></div>
+        <div class="detail"><span class="ico">📍</span><div><div class="k">Dónde</div><div class="v">[Dirección / lugar]</div></div></div>
+      </div>
+
+      <div id="formZone">
+        <p class="rsvp-q">¿Te caís por la fiesta?</p>
+        <div class="rsvp" id="rsvp">
+          <button type="button" class="yes" data-val="sí" aria-pressed="true">✅ ¡Sí voy!</button>
+          <button type="button" class="no" data-val="no" aria-pressed="false">😢 No puedo</button>
+        </div>
+        <input class="inp" id="guestName" type="text" placeholder="Tu nombre">
+        <textarea class="inp" id="note" placeholder="¿Algún mensaje? (opcional)"></textarea>
+        <button type="button" class="send" id="confirmBtn">Confirmar asistencia 🎊</button>
+        <div class="err" id="err" hidden>Uy, algo falló. Inténtalo de nuevo.</div>
+      </div>
+
+      <div id="thanks" class="done" hidden>
+        <div class="big" id="thanksBig">¡Confirmado! 🎉</div>
+        <div class="sm" id="thanksSm">Nos vemos en la fiesta ✨</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ========= CONFIG =========
+  // 👇 Pega aquí la URL /exec de tu Google Apps Script (ver instrucciones).
+  var ENDPOINT = "PEGA_AQUI_LA_URL_DEL_APPS_SCRIPT";
+  // ==========================
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  var userIn = $("user"), passIn = $("pass"), loginBtn = $("loginBtn");
+  function check() { loginBtn.disabled = !(userIn.value.trim() && passIn.value.trim()); }
+  userIn.addEventListener("input", check);
+  passIn.addEventListener("input", check);
+
+  function reveal() {
+    $("login").hidden = true;
+    $("reveal").hidden = false;
+    var guessed = userIn.value.trim();
+    // La contraseña nunca se lee ni se envía: es solo parte de la broma.
+    if (guessed && !/[@]/.test(guessed) && guessed.length < 24) $("guestName").value = guessed;
+    window.scrollTo(0, 0);
+  }
+  $("loginForm").addEventListener("submit", function (e) { e.preventDefault(); reveal(); });
+  $("fbBtn").addEventListener("click", reveal);
+  $("forgot").addEventListener("click", function (e) { e.preventDefault(); reveal(); });
+  $("signup").addEventListener("click", function (e) { e.preventDefault(); reveal(); });
+
+  var answer = "sí";
+  var rsvp = $("rsvp");
+  rsvp.addEventListener("click", function (e) {
+    var b = e.target.closest("button");
+    if (!b) return;
+    answer = b.dataset.val;
+    [].forEach.call(rsvp.querySelectorAll("button"), function (x) {
+      x.setAttribute("aria-pressed", x === b ? "true" : "false");
+    });
+  });
+
+  $("confirmBtn").addEventListener("click", function () {
+    var btn = this;
+    var name = $("guestName").value.trim() || "Alguien";
+    var note = $("note").value.trim();
+    $("err").hidden = true;
+    btn.disabled = true;
+    btn.textContent = "Enviando...";
+
+    var data = new URLSearchParams();
+    data.append("nombre", name);
+    data.append("asiste", answer);
+    data.append("mensaje", note);
+    data.append("fecha", new Date().toLocaleString("es-CL"));
+
+    fetch(ENDPOINT, { method: "POST", mode: "no-cors", body: data })
+      .then(function () {
+        $("formZone").hidden = true;
+        $("thanks").hidden = false;
+        if (answer === "no") {
+          $("thanksBig").textContent = "¡Gracias por avisar! 💛";
+          $("thanksSm").textContent = "Te vamos a extrañar en la fiesta.";
+        }
+      })
+      .catch(function () {
+        btn.disabled = false;
+        btn.textContent = "Confirmar asistencia 🎊";
+        $("err").hidden = false;
+      });
+  });
+</script>
+</body>
+</html>
